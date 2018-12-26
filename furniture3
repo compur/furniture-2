@@ -1,0 +1,330 @@
+import React from 'react';
+import { Block, Card, Icon, Input, NavBar, Text } from 'galio-framework';
+
+import {
+  Image,
+  Platform,
+  ScrollView,
+  StyleSheet,
+  TouchableOpacity,
+  View,
+  Keyboard,
+  Button,
+  Dimensions,
+
+} from 'react-native';
+
+import {
+  RkButton,
+  RkText,
+  RkTextInput,
+  RkStyleSheet,
+  RkTheme,
+  RkAvoidKeyboard,
+  GradientButton,
+} from 'react-native-ui-kitten';
+
+import {Constants} from 'expo';
+// import { GradientButton } from '../rk_components/';
+// import { scaleVertical } from '../utils/scale';
+// import NavigationType from '../config/navigation/propTypes';
+
+import { WebBrowser } from 'expo';
+
+import { MonoText } from '../components/StyledText';
+import Circle from '../components/CircleButton.js'
+let windowHeight = Dimensions.get('window').height;
+let windowWidth = Dimensions.get('window').width;
+const all_styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: '#fff',
+    paddingTop: Constants.statusBarHeight+10,
+    alignItems:'center',
+  },
+
+  inputs:{
+    paddingTop: 20,
+    justifyContent: 'center',
+    flex: 2,
+  },
+
+  input_field: {
+    width: Dimensions.get('window').width*.9,
+    borderColor: '#BFC3C6'
+  },
+
+  signin_button: {
+      paddingVertical: windowHeight*0.005,
+      backgroundColor: 'rgb(255,50,109)',
+      borderRadius: 100,
+      width: windowWidth*0.9,
+      justifyContent: 'center',
+      flex: 0.2,
+  },
+  welcome_message: {
+    color: '#A9A9A9',
+    width: windowWidth*0.9,
+    justifyContent: 'center',
+    textAlign: 'center',
+  },
+  header: {
+    paddingVertical: 20,
+    alignItems: 'center',
+    justifyContent: 'space-around',
+    width: (Dimensions.get('window').width*0.7),
+    flex: 1.2,
+  },
+  circle: {
+    width: windowHeight*0.1,
+    height: windowHeight*0.1,
+    borderRadius: 100/2,
+    backgroundColor: '#4267B2'
+  },
+  socialLogin: {
+    paddingTop: windowHeight*0.03,
+    flexDirection: 'row',
+    justifyContent: 'space-evenly',
+    width: windowWidth*0.8,
+  },
+
+  normalLoginMessage:{
+    color: '#A9A9A9',
+    fontSize: 12,
+    paddingTop: windowHeight*0.02,
+  },
+
+  forgotPassword:{
+    color: '#E9446D',
+    fontSize: 10,
+    textAlign: 'right',
+    paddingVertical: windowHeight*0.01,
+    width: windowWidth*0.8,
+  },
+
+  signup:{
+
+      color: '#E9446D',
+      fontSize: 10,
+      textAlign: 'center',
+      // paddingTop: windowHeight*0.01,
+      width: windowWidth*0.9,
+      paddingTop: 15,
+
+  },
+});
+
+export default class HomeScreen extends React.Component {
+  static navigationOptions = {
+    header: null,
+  };
+
+  handleEmailChange = (email) => {
+    this.setState({email})
+  }
+
+  handlePasswordChange = (password) => {
+    this.setState({password})
+  }
+
+  handleSubmit = () => {
+    console.log('State\n')
+    console.log('email id: '+this.state.email)
+    console.log('pwd: '+this.state.password)
+  }
+
+  handleResetPasswordRequest = () => {
+    // TODO:
+    console.log("Initiate reset password")
+  }
+
+  handleSignUpRequest = () => {
+    // TODO:
+    console.log('Take user to Signup page')
+  }
+  state = {
+    email: '',
+    password: '',
+  }
+
+  render() {
+    return (
+      <Block style = {all_styles.container}>
+
+        <Block style = {all_styles.header}>
+        <View>
+          <RkText rkType = "large" style = {{paddingVertical: 20,}}> Log In! </RkText>
+        </View>
+
+        <View>
+          <Text style = {all_styles.welcome_message}>Welcome back! Why don’t you tell us who you are, so we can prepare things, just for you.</Text>
+        </View>
+
+        <View style = {all_styles.socialLogin}>
+          <Circle type = 'facebook'/>
+          <Circle type = 'twitter'/>
+          <Circle type = 'google' />
+        </View>
+        <Text style = {all_styles.normalLoginMessage}> or go old school </Text>
+      </Block>
+
+      <Block style = {all_styles.inputs}>
+
+
+              <Input
+                rounded
+                type="email-address"
+                placeholder="Email"
+                autoCapitalize="none"
+                style={all_styles.input_field}
+                onChangeText={text => this.handleEmailChange(text)}
+              />
+
+              <Input
+                rounded
+                password
+                viewPass
+                placeholder="Password"
+                style={all_styles.input_field}
+                onChangeText={text => this.handlePasswordChange(text)}
+                />
+                <TouchableOpacity onPress = {this.handleResetPasswordRequest}>
+                  <Text style = {all_styles.forgotPassword}> Forgot Password? </Text>
+                </TouchableOpacity>
+
+
+              <TouchableOpacity style={all_styles.signin_button} onPress = {this.handleSubmit}>
+                  <Text style = {{color: 'white', textAlign: 'center'}}> Sign In </Text>
+              </TouchableOpacity>
+
+          <TouchableOpacity onPress = {this.handleSignUpRequest}>
+            <Text style = {all_styles.signup}> First Time? Sign Up </Text>
+          </TouchableOpacity>
+      </Block>
+      </Block>
+    );
+  }
+
+  _maybeRenderDevelopmentModeWarning() {
+    if (__DEV__) {
+      const learnMoreButton = (
+        <Text onPress={this._handleLearnMorePress} style={styles.helpLinkText}>
+          Learn more
+        </Text>
+      );
+
+      return (
+        <Text style={styles.developmentModeText}>
+          Development mode is enabled, your app will be slower but you can use useful development
+          tools. {learnMoreButton}
+        </Text>
+      );
+    } else {
+      return (
+        <Text style={styles.developmentModeText}>
+          You are not in development mode, your app will run at full speed.
+        </Text>
+      );
+    }
+  }
+
+  _handleLearnMorePress = () => {
+    WebBrowser.openBrowserAsync('https://docs.expo.io/versions/latest/guides/development-mode');
+  };
+
+  _handleHelpPress = () => {
+    WebBrowser.openBrowserAsync(
+      'https://docs.expo.io/versions/latest/guides/up-and-running.html#can-t-see-your-changes'
+    );
+  };
+}
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: '#fff',
+    justifyContent: 'space-between',
+  },
+  developmentModeText: {
+    marginBottom: 20,
+    color: 'rgba(0,0,0,0.4)',
+    fontSize: 14,
+    lineHeight: 19,
+    textAlign: 'center',
+  },
+  contentContainer: {
+    paddingTop: 30,
+  },
+  welcomeContainer: {
+    alignItems: 'center',
+    marginTop: 10,
+    marginBottom: 20,
+  },
+  welcomeImage: {
+    width: 100,
+    height: 80,
+    resizeMode: 'contain',
+    marginTop: 3,
+    marginLeft: -10,
+  },
+  getStartedContainer: {
+    alignItems: 'center',
+    marginHorizontal: 50,
+  },
+  homeScreenFilename: {
+    marginVertical: 7,
+  },
+  codeHighlightText: {
+    color: 'rgba(96,100,109, 0.8)',
+  },
+  codeHighlightContainer: {
+    backgroundColor: 'rgba(0,0,0,0.05)',
+    borderRadius: 3,
+    paddingHorizontal: 4,
+  },
+  getStartedText: {
+    fontSize: 17,
+    color: 'rgba(96,100,109, 1)',
+    lineHeight: 24,
+    textAlign: 'center',
+  },
+  tabBarInfoContainer: {
+    position: 'absolute',
+    bottom: 0,
+    left: 0,
+    right: 0,
+    ...Platform.select({
+      ios: {
+        shadowColor: 'black',
+        shadowOffset: { height: -3 },
+        shadowOpacity: 0.1,
+        shadowRadius: 3,
+      },
+      android: {
+        elevation: 20,
+      },
+    }),
+    alignItems: 'center',
+    backgroundColor: '#fbfbfb',
+    paddingVertical: 20,
+  },
+  tabBarInfoText: {
+    fontSize: 17,
+    color: 'rgba(96,100,109, 1)',
+    textAlign: 'center',
+  },
+  navigationFilename: {
+    marginTop: 5,
+  },
+  helpContainer: {
+    marginTop: 15,
+    alignItems: 'center',
+  },
+  helpLink: {
+    paddingVertical: 15,
+  },
+  helpLinkText: {
+    fontSize: 14,
+    color: '#2e78b7',
+  },
+});
